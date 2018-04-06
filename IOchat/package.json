@@ -1,0 +1,10 @@
+{
+  "name": "io-chat",
+  "version": "0.0.1",
+  "description": "IO chat client for Twitch.tv",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.0",
+    "tmi.js": "^1.2.1"
+  }
+}
