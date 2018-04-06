@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Socket.IO chat</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -20,22 +20,32 @@
     });
 </script>
 <body>
-<div  style="width: 100%; overflow: hidden;">
-    <div id="chatdiv" style="width: 600px; float: left;">
-        <ul id="messages"></ul>
-        <form action="">
-            <input id="m" autocomplete="off" /><button>Send</button>
-        </form>
-    </div>
 
-    <div id="info" style="margin-left: 620px;">
-        <form action="" id="login">
-            <input name="nickname" id="nick" type="text" />
-            <input name="oath" id="password" type="password" />
-            <input name="channel" id="channel" type="text" />
-            <button>Login</button>
-        </form>
-    </div>
-</div>
+        <h1> Io chat</h1>
+
+        <div id="chatdiv">
+            <ul id="messages"></ul>
+            <form action="">
+                <div id="messageBox">
+                    <input id="m" autocomplete="off" />
+                    <button>Send</button>
+                </div>
+            </form>
+        </div>
+
+
+
+        <div id="info">
+            <form action="" id="login">
+                <label for="nick">Nickname</label>
+                <input name="nickname" id="nick" type="text" />
+                <label for="password">Password</label>
+                <input name="oath" id="password" type="password" />
+                <label for="channel">Channel</label>
+                <input name="channel" id="channel" type="text" />
+                <button>Login</button>
+            </form>
+        </div>
+
 </body>
 </html>
