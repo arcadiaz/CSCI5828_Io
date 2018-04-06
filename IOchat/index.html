@@ -1,9 +1,10 @@
 <!doctype html>
 <html>
 <head>
-    <title>Socket.IO chat</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>IO chat</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" >
 </head>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
@@ -14,7 +15,7 @@
             $('#m').val('');
             return false;
         });
-        socket.on('chat message', function(msg){
+        socket.on('display messages', function(msg){
             $('#messages').append($('<li>').text(msg));
         });
     });

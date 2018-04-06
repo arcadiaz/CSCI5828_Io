@@ -1,6 +1,5 @@
 body {
-     font: 13px Helvetica, Arial;
-     
+    font: 13px Helvetica, Arial;
 }
 
 h1 {
@@ -8,7 +7,6 @@ h1 {
     position: fixed;
     width: 100%;
     z-index: 2;
-
 }
 
 #chatdiv {
@@ -16,13 +14,10 @@ h1 {
     position: absolute;
     bottom: 0;
     padding: 10%;
-
 }
-
 
 #messageBox input{
     width: 80%
-    
 }
 
 #messageBox button {
@@ -30,18 +25,17 @@ h1 {
 }
 
 #messages {
-     list-style-type: none;
-     margin: 0;
-     padding: 0;
-
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 #messages li {
-     padding: 5px 10px;
+    padding: 5px 10px;
 }
 
 #messages li:nth-child(odd) {
-     background: #eee;
+    background: #eee;
 }
 
 #info {
@@ -58,7 +52,5 @@ h1 {
 
 #info input {
     display: block;
-    width: 100% 
+    width: 100%
 }
-
-
