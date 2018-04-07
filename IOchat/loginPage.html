@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IO chat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <style>
+        .center_div{
+            margin: 20% auto;
+            width:20%
+        }
+    </style>
+</head>
+
+
+<body>
+<div class="container">
+    <div class="center_div">
+        <form action="/" id="login" method="post">
+            <div class="form-group">
+                <label for="nickname">Nickname</label>
+                <input name="nickname" id="nickname" type="text"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input name="password" id="password" type="password"/>
+            </div>
+            <div class="form-group">
+                <label for="channel">Channel</label>
+                <input name="channel" id="channel" type="text"/>
+            </div>
+            <button>Login</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

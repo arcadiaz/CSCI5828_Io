@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>IO chat</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css" >
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -10,56 +10,30 @@
 <script>
     $(function () {
         var socket = io();
-        $('#chatbox').submit(function(){
+        $('#chatbox').submit(function () {
             socket.emit('chat message', $('#m').val());
             $('#m').val('');
             return false;
         });
-        socket.on('display messages', function(msg){
+        socket.on('display messages', function (msg) {
             $('#messages').append($('<li>').text(msg));
             var objDiv = document.getElementById("messages");
             objDiv.scrollTop = objDiv.scrollHeight;
         });
     });
-    $(function () {
-        var socket = io();
-        $('#login').submit(function(){
-            socket.emit('userlogin', $('#nick').val(), $('#password').val(), $('#channel').val());
-            $('#nick').val('');
-            $('#password').val('');
-            $('#channel').val('');
-            return false;
-        });
-    });
 </script>
 <body>
-        <h1> Io chat</h1>
-
-        <div id="chatdiv">
-            <ul id="messages">
-                <li>Please log in!</li>
-            </ul>
-            <form action="" id="chatbox">
-                <div id="messageBox">
-                    <input id="m" autocomplete="off" />
-                    <button>Send</button>
-                </div>
-            </form>
+<h1> Io chat</h1>
+<div id="chatdiv">
+    <ul id="messages">
+    </ul>
+    <form action="/" id="chatbox">
+        <div id="messageBox">
+            <input id="m" autocomplete="off"/>
+            <button>Send</button>
         </div>
-
-
-
-        <div id="info">
-            <form action="" id="login">
-                <label for="nick">Nickname</label>
-                <input name="nickname" id="nick" type="text" />
-                <label for="password">Password</label>
-                <input name="oath" id="password" type="password" />
-                <label for="channel">Channel</label>
-                <input name="channel" id="channel" type="text" />
-                <button>Login</button>
-            </form>
-        </div>
+    </form>
+</div>
 
 </body>
 </html>
