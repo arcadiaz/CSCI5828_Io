@@ -17,6 +17,8 @@
         });
         socket.on('display messages', function(msg){
             $('#messages').append($('<li>').text(msg));
+            var objDiv = document.getElementById("messages");
+            objDiv.scrollTop = objDiv.scrollHeight;
         });
     });
     $(function () {

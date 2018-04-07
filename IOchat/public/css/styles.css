@@ -25,9 +25,12 @@ h1 {
 }
 
 #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+      list-style:none;
+      max-height:500px;
+      margin:0;
+      overflow:auto;
+      padding:0;
+      text-indent:10px;
 }
 
 #messages li {
@@ -54,3 +57,4 @@ h1 {
     display: block;
     width: 100%
 }
+
