@@ -10,7 +10,7 @@
 <script>
     $(function () {
         var socket = io();
-        $('form').submit(function(){
+        $('#chatbox').submit(function(){
             socket.emit('chat message', $('#m').val());
             $('#m').val('');
             return false;
@@ -19,14 +19,25 @@
             $('#messages').append($('<li>').text(msg));
         });
     });
+    $(function () {
+        var socket = io();
+        $('#login').submit(function(){
+            socket.emit('userlogin', $('#nick').val(), $('#password').val(), $('#channel').val());
+            $('#nick').val('');
+            $('#password').val('');
+            $('#channel').val('');
+            return false;
+        });
+    });
 </script>
 <body>
-
         <h1> Io chat</h1>
 
         <div id="chatdiv">
-            <ul id="messages"></ul>
-            <form action="">
+            <ul id="messages">
+                <li>Please log in!</li>
+            </ul>
+            <form action="" id="chatbox">
                 <div id="messageBox">
                     <input id="m" autocomplete="off" />
                     <button>Send</button>
