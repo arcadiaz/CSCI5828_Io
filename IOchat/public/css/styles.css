@@ -1,60 +1,18 @@
-body {
-    font: 13px Helvetica, Arial;
-}
-
-h1 {
-    background: #eee;
-    position: fixed;
-    width: 100%;
-    z-index: 2;
-}
-
-#chatdiv {
-    width: 70%;
-    position: absolute;
-    bottom: 0;
-    padding: 10%;
-}
-
-#messageBox input{
-    width: 80%
-}
-
-#messageBox button {
-    width: 18%
-}
-
 #messages {
       list-style:none;
       max-height:500px;
-      margin:0;
-      overflow:auto;
-      padding:0;
-      text-indent:10px;
+      overflow-y:scroll;
+      overflow-x:hidden;
 }
 
-#messages li {
-    padding: 5px 10px;
+#messages {
+  padding-left: 3;
+  padding-right: 3;
 }
 
 #messages li:nth-child(odd) {
     background: #eee;
 }
 
-#info {
-    position: absolute;
-    right: 0;
-    z-index: 3;
-}
 
-
-#info label {
-    display: block;
-
-}
-
-#info input {
-    display: block;
-    width: 100%
-}
 

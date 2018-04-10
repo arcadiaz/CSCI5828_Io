@@ -3,6 +3,7 @@
 <head>
     <title>IO chat</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -16,7 +17,7 @@
             return false;
         });
         socket.on('display messages', function (msg) {
-            $('#messages').append($('<li>').text(msg));
+            $('#messages').append($('<li class="row">').text(msg));
             var objDiv = document.getElementById("messages");
             objDiv.scrollTop = objDiv.scrollHeight;
         });
@@ -24,16 +25,27 @@
 </script>
 <body>
 <h1> Io chat</h1>
-<div id="chatdiv">
-    <ul id="messages">
-    </ul>
-    <form action="/" id="chatbox">
-        <div id="messageBox">
-            <input id="m" autocomplete="off"/>
-            <button>Send</button>
-        </div>
-    </form>
+
+<div class = "row">
+
+    <div id="chatdiv" class="col-md-6">
+        <ul id="messages">
+            
+        </ul>
+        <form action="/" id="chatbox" class="row">
+            <input class="col-md-10" id="m" autocomplete="off"/>
+            <button class="col-md-2">Send</button>
+        </form>
+    </div>
+
+    <div id="statsdiv" class="col-md-6">
+        stats and graphs will go here 
+    </div>
+
 </div>
 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
