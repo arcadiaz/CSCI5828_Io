@@ -1,0 +1,37 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        title IO chat
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+        script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+        style.
+            .center_div{
+                margin: 20% auto;
+                width:20%
+            }
+    script(src='/socket.io/socket.io.js')
+    script(src='https://code.jquery.com/jquery-1.11.1.js')
+    body
+        .container
+            .center_div
+                if errors
+                    ul
+                        for error in errors
+                            li!= error.msg
+                if authfail
+                    ul
+                        li!=authfail
+                form#login(action='/', method='post')
+                    .form-group
+                        label(for='nickname') Nickname
+                        input#nickname(name='nickname', type='text')
+                    .form-group
+                        label(for='password') Password
+                        input#password(name='password', type='password')
+                    .form-group
+                        label(for='channel') Channel
+                        input#channel(name='channel', type='text')
+                    button Login
