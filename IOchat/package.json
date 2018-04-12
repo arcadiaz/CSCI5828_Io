@@ -5,6 +5,8 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "express-validator": "^5.1.2",
+    "pug": "^2.0.3",
     "socket.io": "^2.1.0",
     "tmi.js": "^1.2.1"
   }
