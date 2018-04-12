@@ -14,5 +14,9 @@
     background: #eee;
 }
 
+#statsdiv {
+    background: lightgoldenrodyellow;
+    min-height: 70%;
+}
 
 

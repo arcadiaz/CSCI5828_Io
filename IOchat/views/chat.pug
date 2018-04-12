@@ -3,6 +3,11 @@ html
     head
         title IO chat
         link(rel='stylesheet', type='text/css', href='css/styles.css')
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+        script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+
     script(src='/socket.io/socket.io.js')
     script(src='https://code.jquery.com/jquery-1.11.1.js')
     script.
@@ -21,9 +26,13 @@ html
         });
     body
         h1  Io chat
-        #chatdiv
-            ul#messages
-            form#chatbox(action='/')
-                #messageBox
-                    input#m(autocomplete='off')
-                    button Send
+        div.row
+            #chatdiv.col-md-6
+                ul#messages
+                form#chatbox(action='/')
+                    #messageBox.row
+                        input#m(autocomplete='off').col-md-10
+                        button.col-md-2 Send
+
+            #statsdiv.col-md-6
+                p stats will go here
