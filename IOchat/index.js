@@ -88,7 +88,7 @@ app.post('/', urlencodedParser, function (req, res) {
         }
     ).catch(
         err => {
-            res.render('login', {authfail: "Authentication failed"});
+            res.render('login', {authfail: "Authentication failed, please check that your nickname and password are correct."});
             console.log("failed auth with error:", err);
         }
     );

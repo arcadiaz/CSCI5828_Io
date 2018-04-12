@@ -3,6 +3,7 @@ html(lang='en')
     head
         meta(charset='UTF-8')
         title IO chat
+        link(rel='stylesheet', type='text/css', href='css/login.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
         script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
@@ -17,21 +18,20 @@ html(lang='en')
     body
         .container
             .center_div
-                if errors
-                    ul
+                .alert.alert-warning
+                    if errors
                         for error in errors
-                            li!= error.msg
-                if authfail
-                    ul
-                        li!=authfail
+                            p!= error.msg
+                    if authfail
+                        p!=authfail
                 form#login(action='/', method='post')
                     .form-group
                         label(for='nickname') Nickname
-                        input#nickname(name='nickname', type='text')
+                        input#nickname(name='nickname', type='text' required)
                     .form-group
                         label(for='password') Password
-                        input#password(name='password', type='password')
+                        input#password(name='password', type='password' required)
                     .form-group
                         label(for='channel') Channel
-                        input#channel(name='channel', type='text')
+                        input#channel(name='channel', type='text' required)
                     button Login
