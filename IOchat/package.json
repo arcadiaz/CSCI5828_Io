@@ -6,6 +6,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-validator": "^5.1.2",
+    "keyword-extractor": "0.0.15",
+    "mysql": "^2.15.0",
     "pug": "^2.0.3",
     "socket.io": "^2.1.0",
     "tmi.js": "^1.2.1"

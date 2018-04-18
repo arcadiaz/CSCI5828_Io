@@ -16,7 +16,8 @@
 
 #statsdiv {
     background: lightgoldenrodyellow;
-    min-height: 70%;
+    max-height: 500px;
+	overflow-y: scroll;
 }
 
 

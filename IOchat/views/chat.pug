@@ -22,6 +22,17 @@ html
                 $('#messages').append($('<li>').text(msg));
                 var objDiv = document.getElementById("messages");
                 objDiv.scrollTop = objDiv.scrollHeight;
+
+                $.get(
+                    "getStats",
+                    {},
+                    function (data) {
+                        $('#keywords').html('');
+                        data.forEach( function (word) {
+                            $('#keywords').append($('<li>').text(word));
+                        });
+                    }
+                );
             });
         });
     body
@@ -35,4 +46,6 @@ html
                         button.col-md-2 Send
 
             #statsdiv.col-md-6
-                p stats will go here
+                p Keywords
+                ul#keywords
+

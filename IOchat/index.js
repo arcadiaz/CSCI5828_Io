@@ -1,12 +1,33 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var mysql = require('mysql');
 var tmi = require('tmi.js');
 var io = require('socket.io')(http);
 var path = require('path');
 
+
+//connect to the database
+var mysql = require('mysql');
+
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database: "io"
+});
+
+
+con.connect(function(err) {
+    if (err) throw err;
+    con.query("SELECT * FROM messages", function (err, result, fields) {
+        if (err) throw err;
+        console.log(result);
+    });
+});
+
 //set the template engine
-app.set('view engine', 'pug')
+app.set('view engine', 'pug');
 
 //library for getting info from post request
 var bodyParser = require('body-parser');
@@ -17,6 +38,8 @@ app.use(validator());
 
 var urlencodedParser = bodyParser.urlencoded({extended: false})
 
+let msgs = "";
+let keywords = [];
 var nick;
 var cha;
 
@@ -31,6 +54,29 @@ var client;
 
 http.listen(3000, function () {
     console.log('listening on *:3000');
+});
+
+const process_message =  (msg, nick) => {
+    msg = msg.replace("'", "''");
+    return new Promise((resolve, reject) => {
+        // converting js timestamp to mysql timestamp https://stackoverflow.com/a/11150727
+        let date = new Date();
+        date = date.getUTCFullYear() + '-' +
+            ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+            ('00' + date.getUTCDate()).slice(-2) + ' ' +
+            ('00' + date.getUTCHours()).slice(-2) + ':' +
+            ('00' + date.getUTCMinutes()).slice(-2) + ':' +
+            ('00' + date.getUTCSeconds()).slice(-2);
+        let sql = "INSERT INTO `messages` (`message`, `timestamp`, `username`) VALUES ('" + msg + "', '" +date + "', '" + nick +"'); ";
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            resolve(result);
+        });
+    });
+};
+
+app.get('/getStats', urlencodedParser, function(req, res) {
+    res.status(200).json(keywords);
 });
 
 app.post('/', urlencodedParser, function (req, res) {
@@ -71,10 +117,13 @@ app.post('/', urlencodedParser, function (req, res) {
             client.addListener('join', function () {
                 io.emit('display messages', "Successfully logged in!");
             });
+            msgs = "";
 
             client.addListener('chat', function (channel, userstate, message, self) {
                 var msg = userstate.username + ": " + message;
+                process_message(message, nick);
                 io.emit('display messages', msg);
+
             });
 
             io.on('connection', function (socket) {
