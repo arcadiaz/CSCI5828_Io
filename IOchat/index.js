@@ -5,7 +5,9 @@ var mysql = require('mysql');
 var tmi = require('tmi.js');
 var io = require('socket.io')(http);
 var path = require('path');
+var cookieParser = require('cookie-parser');
 
+app.use(cookieParser());
 
 //connect to the database
 var mysql = require('mysql');
@@ -20,7 +22,7 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    con.query("SELECT * FROM messages", function (err, result, fields) {
+    con.query("SET NAMES 'utf8mb4'", function (err, result, fields) {
         if (err) throw err;
         console.log(result);
     });
@@ -56,27 +58,44 @@ http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-const process_message =  (msg, nick) => {
-    msg = msg.replace("'", "''");
+
+function create_sql_timestamp () {
+    let date = new Date();
+    date = date.getUTCFullYear() + '-' +
+        ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+        ('00' + date.getUTCDate()).slice(-2) + ' ' +
+        ('00' + date.getUTCHours()).slice(-2) + ':' +
+        ('00' + date.getUTCMinutes()).slice(-2) + ':' +
+        ('00' + date.getUTCSeconds()).slice(-2);
+
+    return date;
+}
+
+const process_message =  (msg, nick, channel) => {
+    msg = msg.replace("'", "\\'"); //escaping single quotes '
     return new Promise((resolve, reject) => {
         // converting js timestamp to mysql timestamp https://stackoverflow.com/a/11150727
-        let date = new Date();
-        date = date.getUTCFullYear() + '-' +
-            ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
-            ('00' + date.getUTCDate()).slice(-2) + ' ' +
-            ('00' + date.getUTCHours()).slice(-2) + ':' +
-            ('00' + date.getUTCMinutes()).slice(-2) + ':' +
-            ('00' + date.getUTCSeconds()).slice(-2);
-        let sql = "INSERT INTO `messages` (`message`, `timestamp`, `username`) VALUES ('" + msg + "', '" +date + "', '" + nick +"'); ";
+        let date = create_sql_timestamp();
+        let sql = "INSERT INTO `messages` (`message`, `timestamp`, `username`, `channel`) VALUES ('" + msg + "', '" +date + "', '" + nick +"', '" + channel  + "'); ";
         con.query(sql, function (err, result, fields) {
-            if (err) throw err;
+            if (err) reject(err);
             resolve(result);
         });
     });
 };
 
-app.get('/getStats', urlencodedParser, function(req, res) {
-    res.status(200).json(keywords);
+
+//endpoint for getting last five minutes worth of messages for a user in a channel
+app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
+    let username = req.params.username;
+    let channel = req.params.channel;
+    let sql = "SELECT * FROM `messages` WHERE username='" + username + "' AND channel='#" + channel+"' AND timestamp >= NOW() - INTERVAL 5 MINUTE;";
+    console.log(sql);
+    con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.status(200).json(result);
+    });
+
 });
 
 app.post('/', urlencodedParser, function (req, res) {
@@ -94,7 +113,7 @@ app.post('/', urlencodedParser, function (req, res) {
     }
 
     nick = req.body.nickname;
-    cha = req.body.channel;
+    cha = req.body.channel.toLowerCase();
 
     //if the channel name does not start with #, add a # to it
     if (!cha.startsWith("#", 0)){
@@ -114,6 +133,8 @@ app.post('/', urlencodedParser, function (req, res) {
         data => {
             console.log("success", data, cha);
 
+
+
             client.addListener('join', function () {
                 io.emit('display messages', "Successfully logged in!");
             });
@@ -121,7 +142,7 @@ app.post('/', urlencodedParser, function (req, res) {
 
             client.addListener('chat', function (channel, userstate, message, self) {
                 var msg = userstate.username + ": " + message;
-                process_message(message, nick);
+                process_message(message, nick, channel);
                 io.emit('display messages', msg);
 
             });
@@ -133,6 +154,9 @@ app.post('/', urlencodedParser, function (req, res) {
                 });
             });
 
+            cha = cha.replace("#", ""); // remove the # from the channel name (it causes issues later when a GET is sent)
+            res.cookie('channel', cha);
+            res.cookie("username", nick);
             res.render('chat');
         }
     ).catch(
