@@ -23,13 +23,16 @@ html
                 var objDiv = document.getElementById("messages");
                 objDiv.scrollTop = objDiv.scrollHeight;
 
+                let channel = document.cookie.replace(/(?:(?:^|.*;\s*)channel\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+                let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
                 $.get(
-                    "getStats",
+                    "getStats/" + username + "/" + channel,
                     {},
                     function (data) {
                         $('#keywords').html('');
                         data.forEach( function (word) {
-                            $('#keywords').append($('<li>').text(word));
+                            $('#keywords').append($('<li>').text(word.timestamp +  " " + word.message));
                         });
                     }
                 );

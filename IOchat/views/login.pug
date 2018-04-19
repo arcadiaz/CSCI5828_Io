@@ -18,12 +18,13 @@ html(lang='en')
     body
         .container
             .center_div
-                .alert.alert-warning
-                    if errors
-                        for error in errors
-                            p!= error.msg
-                    if authfail
-                        p!=authfail
+                if errors || authfail
+                    .alert.alert-warning
+                        if errors
+                            for error in errors
+                                p!= error.msg
+                        if authfail
+                            p!=authfail
                 form#login(action='/', method='post')
                     .form-group
                         label(for='nickname') Nickname
