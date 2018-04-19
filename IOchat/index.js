@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var mysql = require('mysql');
 var tmi = require('tmi.js');
 var io = require('socket.io')(http);
 var path = require('path');
