@@ -1,50 +1,59 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var tmi = require('tmi.js');
-var io = require('socket.io')(http);
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const tmi = require('tmi.js');
+const io = require('socket.io')(http);
+const path = require('path');
+const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
-
-//connect to the database
-var mysql = require('mysql');
-
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "io"
-});
-
-
-con.connect(function(err) {
-    if (err) throw err;
-    con.query("SET NAMES 'utf8mb4'", function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-    });
-});
 
 //set the template engine
 app.set('view engine', 'pug');
 
 //library for getting info from post request
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
 //form validation library
-var validator = require('express-validator');
+const validator = require('express-validator');
 app.use(validator());
 
-var urlencodedParser = bodyParser.urlencoded({extended: false})
+const urlencodedParser = bodyParser.urlencoded({extended: false});
+
+app.use(express.static(path.join(__dirname, '/public')));
+
+
+//connect to the database
+const mysql = require('mysql');
+const db_options = require('./options');
+
+
+let db_con = mysql.createConnection({
+    host: db_options.db_config.host,
+    user: db_options.db_config.user,
+    password: db_options.db_config.password,
+    database: db_options.db_config.database
+});
+
+
+db_con.connect(function(err) {
+    if (err) throw err;
+    db_con.query("SET NAMES 'utf8mb4'", function (err, result, fields) {
+        if (err) throw err;
+        console.log(result);
+    });
+});
+
+db_con.query("select * from messages", function (err, result, fields) {
+    console.log(result)
+});
+
 
 let msgs = "";
 let keywords = [];
-var nick;
-var cha;
+let nick = "";
+let cha = "";
 
-app.use(express.static(path.join(__dirname, '/public')));
 
 //render a view
 app.get('/', function (req, res) {
@@ -56,7 +65,6 @@ var client;
 http.listen(3000, function () {
     console.log('listening on *:3000');
 });
-
 
 function create_sql_timestamp () {
     let date = new Date();
@@ -75,8 +83,8 @@ const process_message =  (msg, nick, channel) => {
     return new Promise((resolve, reject) => {
         // converting js timestamp to mysql timestamp https://stackoverflow.com/a/11150727
         let date = create_sql_timestamp();
-        let sql = "INSERT INTO `messages` (`message`, `timestamp`, `username`, `channel`) VALUES ('" + msg + "', '" +date + "', '" + nick +"', '" + channel  + "'); ";
-        con.query(sql, function (err, result, fields) {
+        let sql = "INSERT INTO `messages` (`msg_body`, `times_tamp`, `username`, `channel`) VALUES ('" + msg + "', '" +date + "', '" + nick +"', '" + channel  + "'); ";
+        db_con.query(sql, function (err, result, fields) {
             if (err) reject(err);
             resolve(result);
         });
@@ -88,9 +96,9 @@ const process_message =  (msg, nick, channel) => {
 app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
     let username = req.params.username;
     let channel = req.params.channel;
-    let sql = "SELECT * FROM `messages` WHERE username='" + username + "' AND channel='#" + channel+"' AND timestamp >= NOW() - INTERVAL 5 MINUTE;";
+    let sql = "SELECT * FROM `messages` WHERE username='" + username + "' AND channel='#" + channel+"' AND time_stamp >= NOW() - INTERVAL 5 MINUTE;";
     console.log(sql);
-    con.query(sql, function (err, result, fields) {
+    db_con.query(sql, function (err, result, fields) {
         if (err) throw err;
         res.status(200).json(result);
     });
@@ -105,7 +113,7 @@ app.post('/', urlencodedParser, function (req, res) {
     req.checkBody("channel").not().isEmpty().withMessage("Channel cannot be empty");
 
     //re-render view with error message if any field is empty
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
     if (errors){
         console.log(errors);
         res.render('login', {errors: errors});
@@ -119,7 +127,7 @@ app.post('/', urlencodedParser, function (req, res) {
         cha = "#" + cha;
     }
 
-    var options = {
+    let options = {
         identity: {
             username: nick,
             password: req.body.password
@@ -132,18 +140,15 @@ app.post('/', urlencodedParser, function (req, res) {
         data => {
             console.log("success", data, cha);
 
-
-
             client.addListener('join', function () {
                 io.emit('display messages', "Successfully logged in!");
             });
             msgs = "";
 
             client.addListener('chat', function (channel, userstate, message, self) {
-                var msg = userstate.username + ": " + message;
+                let msg = userstate.username + ": " + message;
                 process_message(message, nick, channel);
                 io.emit('display messages', msg);
-
             });
 
             io.on('connection', function (socket) {
