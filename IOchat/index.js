@@ -4,8 +4,11 @@ const http = require('http').Server(app);
 const tmi = require('tmi.js');
 const io = require('socket.io')(http);
 const path = require('path');
-const cookieParser = require('cookie-parser');
+const db_tools = require('./db_tools');
+app.use(express.static(path.join(__dirname, '/public')));
 
+// libraries for using cookies
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 //set the template engine
@@ -13,49 +16,25 @@ app.set('view engine', 'pug');
 
 //library for getting info from post request
 const bodyParser = require('body-parser');
+const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 //form validation library
 const validator = require('express-validator');
 app.use(validator());
 
-const urlencodedParser = bodyParser.urlencoded({extended: false});
+// establish a connection with the database
+let db_con = db_tools.establish_db_connection();
 
-app.use(express.static(path.join(__dirname, '/public')));
-
-
-//connect to the database
-const mysql = require('mysql');
-const db_options = require('./options');
-
-
-let db_con = mysql.createConnection({
-    host: db_options.db_config.host,
-    user: db_options.db_config.user,
-    password: db_options.db_config.password,
-    database: db_options.db_config.database
-});
-
-
-db_con.connect(function(err) {
-    if (err) throw err;
-    db_con.query("SET NAMES 'utf8mb4'", function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-    });
-});
 
 db_con.query("select * from messages", function (err, result, fields) {
     console.log(result)
 });
 
-
 let msgs = "";
-let keywords = [];
 let nick = "";
 let cha = "";
 
-
-//render a view
+//render a view - main page
 app.get('/', function (req, res) {
     res.render('login');
 });
@@ -66,45 +45,7 @@ http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-function create_sql_timestamp () {
-    let date = new Date();
-    date = date.getUTCFullYear() + '-' +
-        ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
-        ('00' + date.getUTCDate()).slice(-2) + ' ' +
-        ('00' + date.getUTCHours()).slice(-2) + ':' +
-        ('00' + date.getUTCMinutes()).slice(-2) + ':' +
-        ('00' + date.getUTCSeconds()).slice(-2);
-
-    return date;
-}
-
-const process_message =  (msg, nick, channel) => {
-    msg = msg.replace("'", "\\'"); //escaping single quotes '
-    return new Promise((resolve, reject) => {
-        // converting js timestamp to mysql timestamp https://stackoverflow.com/a/11150727
-        let date = create_sql_timestamp();
-        let sql = "INSERT INTO `messages` (`msg_body`, `times_tamp`, `username`, `channel`) VALUES ('" + msg + "', '" +date + "', '" + nick +"', '" + channel  + "'); ";
-        db_con.query(sql, function (err, result, fields) {
-            if (err) reject(err);
-            resolve(result);
-        });
-    });
-};
-
-
-//endpoint for getting last five minutes worth of messages for a user in a channel
-app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
-    let username = req.params.username;
-    let channel = req.params.channel;
-    let sql = "SELECT * FROM `messages` WHERE username='" + username + "' AND channel='#" + channel+"' AND time_stamp >= NOW() - INTERVAL 5 MINUTE;";
-    console.log(sql);
-    db_con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        res.status(200).json(result);
-    });
-
-});
-
+//form validation and connect to the Twitch chat IRC
 app.post('/', urlencodedParser, function (req, res) {
 
     //check if any field is empty
@@ -169,7 +110,13 @@ app.post('/', urlencodedParser, function (req, res) {
             console.log("failed auth with error:", err);
         }
     );
-
 });
 
 
+
+//endpoint for getting last five minutes worth of messages for a user in a channel
+// app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
+//     let username = req.params.username;
+//     let channel = req.params.channel;
+//     db_tools.retrieve_msgs(db_con, 5, username, channel);
+// });
