@@ -14,5 +14,8 @@
     "pug": "^2.0.3",
     "socket.io": "^2.1.0",
     "tmi.js": "^1.2.1"
+  },
+  "scripts": {
+    "test": "mocha --reporter list"
   }
 }

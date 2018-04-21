@@ -87,7 +87,8 @@ app.post('/', urlencodedParser, function (req, res) {
 
             client.addListener('chat', function (channel, userstate, message, self) {
                 let msg = userstate.username + ": " + message;
-                process_message(message, nick, channel);
+                //process_message(message, nick, channel);
+                db_tools.insert_msg(db_con, message, nick, channel);
                 io.emit('display messages', msg);
             });
 
@@ -114,8 +115,8 @@ app.post('/', urlencodedParser, function (req, res) {
 
 
 //endpoint for getting last five minutes worth of messages for a user in a channel
-// app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
-//     let username = req.params.username;
-//     let channel = req.params.channel;
-//     db_tools.retrieve_msgs(db_con, 5, username, channel);
-// });
+app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
+    let username = req.params.username;
+    let channel = req.params.channel;
+    db_tools.retrieve_msgs(db_con, 5, username, channel);
+});
