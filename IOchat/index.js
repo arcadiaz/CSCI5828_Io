@@ -25,7 +25,6 @@ app.use(validator());
 // establish a connection with the database
 let db_con = db_tools.establish_db_connection();
 
-
 db_con.query("select * from messages", function (err, result, fields) {
     console.log(result)
 });
