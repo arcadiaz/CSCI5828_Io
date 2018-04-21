@@ -4,10 +4,12 @@
   "description": "IO chat client for Twitch.tv",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-validator": "^5.1.2",
     "keyword-extractor": "0.0.15",
+    "mocha": "^5.1.1",
     "mysql": "^2.15.0",
     "pug": "^2.0.3",
     "socket.io": "^2.1.0",
