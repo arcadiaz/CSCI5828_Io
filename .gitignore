@@ -1,3 +1,5 @@
 node_modules
 .idea/
 .DS_Store
+IOchat_python/venv/
+IOchat_python/.idea/
