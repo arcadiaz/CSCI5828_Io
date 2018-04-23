@@ -120,3 +120,10 @@ app.get('/getStats/:username/:channel', urlencodedParser, function(req, res) {
     let channel = req.params.channel;
     db_tools.retrieve_msgs(db_con, 5, username, channel);
 });
+
+
+//endpoint to receive data from python script
+app.post('/update', urlencodedParser, function (req, res) {
+   console.log(req.body);
+   res.send("success!");
+});
