@@ -42,6 +42,17 @@ module.exports = {
             });
         });
         return db_con;
+    },
+
+    retrieve_msg_body_only: function (db_connection, time_interval, username, channel) {
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT msg_body FROM `messages` WHERE username='" + username + "' AND channel='" + channel+"' AND time_stamp >= NOW() - INTERVAL " + time_interval + " MINUTE;";
+            console.log(sql);
+            db_connection.query(sql, function (err, result, fields) {
+                if (err) reject(err);
+                resolve(result);
+            });
+        });
     }
 };
 
