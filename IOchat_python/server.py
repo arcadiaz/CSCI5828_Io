@@ -6,13 +6,14 @@ import json
 
 app = Flask(__name__)
 
+
 @app.route('/getStats/<username>/<channel>', methods=['GET'])
 def get_stats(username=None, channel=None):
 	payload = {
             'most_frequent_emote': 'some emote',
             'most_frequent_phrase': 'some phrase',
             'top_5_emotes': ['one', 'two', 'three', 'four', 'five'],
-            'text_summary': 'this is a brief summary of what happened'
+            'text_summary': 'this is a brief summary of what happened for ' + username + ' ' +  channel
             }
 	return json.dumps(payload)
 
