@@ -2,11 +2,12 @@ import mysql.connector
 from mysql.connector import errorcode
 import secret
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class Database:
     def __init__(self):
-        pass
+        self.connect()
 
     def connect(self):
         try:
@@ -37,7 +38,8 @@ class Database:
             'channel = %s AND time_stamp >= %s - INTERVAL %s MINUTE;'
         data = (username, channel, start_time, time_interval)
         self.cursor.execute(q, data)
-        return self.cursor.fetchall()
+        a = self.cursor.fetchall()
+        return [b[0] for b in a]
 
     def __del__(self):
         self.conn.close()
@@ -60,6 +62,14 @@ class Stats:
 
     @staticmethod
     def get_top_phrases(message_list, emote_list, top_n):
-        # TODO
-        pass
-
+        # remove emotes from the messages
+        msg_l = [m for m in message_list if m not in emote_list]
+        print(msg_l)
+        v = TfidfVectorizer(stop_words='english', lowercase=True, ngram_range=(1, 3))
+        v.fit_transform(msg_l)
+        print(v.get_feature_names())
+        top_phrases = v.get_feature_names()
+        if len(top_phrases) <= top_n:
+            return top_phrases, len(top_phrases)
+        else:
+            return top_phrases[:top_n], top_n
