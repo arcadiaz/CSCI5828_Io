@@ -73,3 +73,10 @@ class Stats:
             return top_phrases, len(top_phrases)
         else:
             return top_phrases[:top_n], top_n
+
+    @staticmethod
+    def get_summary(top_n_emotes, translations):
+        summary = ""
+        for e in top_n_emotes:
+            summary += translations.get(e, "") + '; '
+        return summary
