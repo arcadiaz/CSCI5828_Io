@@ -28,17 +28,14 @@ html
 
             let channel = document.cookie.replace(/(?:(?:^|.*;\s*)channel\s*\=\s*([^;]*).*$)|^.*$/, "$1");
             let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            setInterval( () => { $.getJSON('http://localhost:5000/getStats/' + username + '/' + channel, 
+            setInterval( function(){ $.getJSON('http://localhost:5000/getStats/' + username + '/' + channel, 
                     (d) => { 
-
                         $('#emote').html(d['most_frequent_emote']);
                         $('#phrase').html(d['most_frequent_phrase']);
                         $('#summary').html(d['text_summary']);
                         $('#top5').html(JSON.stringify(d['top_5_emotes']));
-
-
-            } 
-        )}, 10000);
+                        } 
+            )}, 10000);
         });
     body
         h1  Io chat
