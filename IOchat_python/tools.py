@@ -76,7 +76,10 @@ class Stats:
 
     @staticmethod
     def get_summary(top_n_emotes, translations):
-        summary = ""
+        r = []
         for e in top_n_emotes:
-            summary += translations.get(e, "")
-        return summary
+            if e not in translations.keys():
+                continue
+            else:
+                r.append(translations[e])
+        return r
