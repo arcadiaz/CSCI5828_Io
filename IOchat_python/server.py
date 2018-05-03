@@ -23,7 +23,7 @@ $ python -m flask run
 @cross_origin()
 def get_stats(username=None, channel=None):
     DB = Database()
-    now = datetime.datetime.now().strftime("%Y-%m-%d  %H:%M:%S")
+    now = datetime.datetime.utcnow()
     a = DB.retrieve_messages_time(username, '#' + channel, now, 1)
     top_emotes = Stats.get_top_emotes(a, secret.emote_list, 5)
     phrases, n = Stats.get_top_phrases(a, secret.emote_list, 3)
