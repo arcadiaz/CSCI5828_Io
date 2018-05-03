@@ -2,8 +2,8 @@ doctype html
 html
     head
         title IO chat
-        link(rel='stylesheet', type='text/css', href='css/styles.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+        link(rel='stylesheet', type='text/css', href='css/styles.css')
         script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
@@ -32,7 +32,13 @@ html
                 $.getJSON('http://localhost:5000/getStats/' + username + '/' + channel,
                     function (d) {
                         $('#emote').html(d['most_frequent_emote']);
-                        $('#phrase').html(d['most_frequent_phrase']);
+                        $('#phrase').html('');
+                        for (var i = 0; i < d['most_frequent_phrase'].length; i++)
+                        {
+                            $('#phrase').append($('<li>').text(d['most_frequent_phrase'][i]));
+                        }
+
+                        $('#summary').html('');
                         for (var i = 0; i < d['text_summary'].length; i++)
                         {
                             $('#summary').append($('<li>').text(d['text_summary'][i]));
@@ -65,8 +71,8 @@ html
                             div#emote 
                     div.card.col-md-6
                         div.card.body
-                            h5.card-title Most Frequent Phrase 
-                            div#phrase
+                            h5.card-title Most Frequent Phrases 
+                            ol#phrase
                 div.row
                     div.card.col-md-6
                         div.card.body

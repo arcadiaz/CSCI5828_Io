@@ -1,3 +1,10 @@
+.h1, h1 {
+    font-size: 5rem;
+    background-color: black;
+    color: white;
+    font-weight: bolder;
+}
+
 #messages {
       list-style:none;
       min-height:500px;
@@ -15,8 +22,32 @@
     background: #eee;
 }
 
-div.card.body {
-  min-height: 200px;
-  border-width: 0px;
+
+div.card {
+  background-color: aliceblue;
+    min-height: 200px;
+    border-width: 0px;
+}
+
+h5.card-title {
+  font-size: 1.5em;
+  font-weight: bolder;
+}
+
+div.card.col-md-6 {
+  border-width: 1px;
+}
+
+body {
+  font-family: "helvetica";
+}
+
+
+div#emote {
+  font-size: 4em;
+}
+
+ul#summary {
+  list-style:none;
 }
 
