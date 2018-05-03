@@ -5,3 +5,4 @@ IOchat_python/venv/
 IOchat_python/.idea/
 IOchat_python/secret.py
 IOchat_python/__pycache__
+*.pyc

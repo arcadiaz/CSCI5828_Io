@@ -23,10 +23,12 @@ html
                 var objDiv = document.getElementById("messages");
                 objDiv.scrollTop = objDiv.scrollHeight;
 
-                let channel = document.cookie.replace(/(?:(?:^|.*;\s*)channel\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-                let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+                
+            });
 
-                $.getJSON('http://localhost:5000/getStats/' + username + '/' + channel, 
+            let channel = document.cookie.replace(/(?:(?:^|.*;\s*)channel\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            setInterval( () => { $.getJSON('http://localhost:5000/getStats/' + username + '/' + channel, 
                     (d) => { 
 
                         $('#emote').html(d['most_frequent_emote']);
@@ -35,9 +37,8 @@ html
                         $('#top5').html(JSON.stringify(d['top_5_emotes']));
 
 
-                    } 
-                );
-            });
+            } 
+        )}, 10000);
         });
     body
         h1  Io chat
