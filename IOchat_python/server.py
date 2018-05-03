@@ -29,7 +29,6 @@ def get_stats(username=None, channel=None):
     phrases, n = Stats.get_top_phrases(a, secret.emote_list, 3)
     featured = Stats.featured_msg(a, phrases)
     summary = Stats.get_summary(top_emotes, secret.translations)
-    print(phrases, n)
 
     payload = {
         'most_frequent_emote': featured,

@@ -86,7 +86,9 @@ class Stats:
 
     @staticmethod
     def featured_msg(message_list, top_phrases):
+        if len(message_list) < 10:
+            return ""
         for m in message_list:
-            if top_phrases[0] in m.lower():
+            if top_phrases[0].tolower() in m.lower():
                 return m
         return ""
