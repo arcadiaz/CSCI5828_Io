@@ -83,3 +83,10 @@ class Stats:
             else:
                 r.append(translations[e])
         return r
+
+    @staticmethod
+    def featured_msg(message_list, top_phrases):
+        for m in message_list:
+            if top_phrases[0] in m.lower():
+                return m
+        return ""
