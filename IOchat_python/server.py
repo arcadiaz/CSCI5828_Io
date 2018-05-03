@@ -24,7 +24,7 @@ $ python -m flask run
 def get_stats(username=None, channel=None):
     DB = Database()
     now = datetime.datetime.now().strftime("%Y-%m-%d  %H:%M:%S")
-    a = DB.retrieve_messages_time(username, '#' + channel, now, 5000)
+    a = DB.retrieve_messages_time(username, '#' + channel, now, 1)
     top_emotes = Stats.get_top_emotes(a, secret.emote_list, 5)
     phrases, n = Stats.get_top_phrases(a, secret.emote_list, 3)
     summary = Stats.get_summary(top_emotes, secret.translations)
@@ -34,6 +34,6 @@ def get_stats(username=None, channel=None):
         'most_frequent_emote': top_emotes[0],
         'most_frequent_phrase': phrases,
         'top_5_emotes': top_emotes,
-        'text_summary': 'this is a brief summary of what happened for ' + username + ' ' + channel + ': ' + summary
+        'text_summary':  summary
     }
     return json.dumps(payload)
