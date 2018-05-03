@@ -33,8 +33,16 @@ html
                     function (d) {
                         $('#emote').html(d['most_frequent_emote']);
                         $('#phrase').html(d['most_frequent_phrase']);
-                        $('#summary').html(d['text_summary']);
-                        $('#top5').html(JSON.stringify(d['top_5_emotes']));
+                        for (var i = 0; i < d['text_summary'].length; i++)
+                        {
+                            $('#summary').append($('<li>').text(d['text_summary'][i]));
+                        }
+
+                        $('#top5').html(''); 
+                        for (var i = 0; i < d['top_5_emotes'].length; i++)
+                        {
+                            $('#top5').append($('<li>').text(d['top_5_emotes'][i]));
+                        }
                         }
             )};
             setInterval(inter, 1000);
@@ -54,20 +62,20 @@ html
                     div.card.col-md-6
                         div.card.body
                             h5.card-title Most Frequent Emote
-                            div#emote blah blah blah
+                            div#emote 
                     div.card.col-md-6
                         div.card.body
                             h5.card-title Most Frequent Phrase 
-                            div#phrase blah blah blah 
+                            div#phrase
                 div.row
                     div.card.col-md-6
                         div.card.body
                             h5.card-title Top 5 Emotes
-                            div#top5 blah blah blah
+                            ol#top5
                     div.card.col-md-6
                         div.card.body
                             h5.card-title Summary
-                            div#summary blah blah blah 
+                            ul#summary 
  
 
 
