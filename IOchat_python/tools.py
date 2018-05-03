@@ -65,7 +65,7 @@ class Stats:
         # remove emotes from the messages
         msg_l = [m for m in message_list if m not in emote_list]
         print(msg_l)
-        v = TfidfVectorizer(stop_words='english', lowercase=True, ngram_range=(1, 3))
+        v = TfidfVectorizer(stop_words='english', lowercase=True, ngram_range=(2, 2))
         v.fit_transform(msg_l)
         print(v.get_feature_names())
         top_phrases = v.get_feature_names()
@@ -78,5 +78,5 @@ class Stats:
     def get_summary(top_n_emotes, translations):
         summary = ""
         for e in top_n_emotes:
-            summary += translations.get(e, "") + '; '
+            summary += translations.get(e, "")
         return summary
